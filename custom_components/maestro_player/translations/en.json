@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MAestro Player",
+        "description": "Adds the MAestro Player card and badge to Home Assistant and lets every user (not only admins) use DSP. No settings needed."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Already configured."
+    }
+  }
+}
