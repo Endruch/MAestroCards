@@ -18,8 +18,9 @@ from .const import DOMAIN
 
 CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
-CARD_FILE = Path(__file__).parent / "www" / "maestro-player-card.js"
-CARD_URL = f"/{DOMAIN}/maestro-player-card.js"
+WWW_DIR = Path(__file__).parent / "www"
+WWW_URL = f"/{DOMAIN}"
+CARDS = ("maestro-player.js", "maestro-thermostat.js")
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
@@ -38,9 +39,10 @@ async def _register_frontend(hass: HomeAssistant) -> None:
     if hass.data.get(f"{DOMAIN}_frontend"):
         return
     hass.data[f"{DOMAIN}_frontend"] = True
-    await hass.http.async_register_static_paths([StaticPathConfig(CARD_URL, str(CARD_FILE), False)])
-    version = int(await hass.async_add_executor_job(lambda: CARD_FILE.stat().st_mtime))
-    frontend.add_extra_js_url(hass, f"{CARD_URL}?v={version}")
+    await hass.http.async_register_static_paths([StaticPathConfig(WWW_URL, str(WWW_DIR), False)])
+    for name in CARDS:
+        version = int(await hass.async_add_executor_job(lambda n=name: (WWW_DIR / n).stat().st_mtime))
+        frontend.add_extra_js_url(hass, f"{WWW_URL}/{name}?v={version}")
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
