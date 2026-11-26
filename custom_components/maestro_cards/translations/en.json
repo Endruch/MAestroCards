@@ -9,5 +9,38 @@
     "abort": {
       "single_instance_allowed": "Already configured."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "MAestro Cards",
+        "description": "Found {players} Music Assistant players ({names}) and {thermostats} thermostats. Leave a list empty to use all of them. Settings made directly in a card always win.",
+        "data": {
+          "players": "Players in the multiroom list",
+          "thermostats": "Thermostats in the thermostat list",
+          "player_theme": "Default color scheme of the player",
+          "thermostat_theme": "Default color scheme of the thermostat"
+        },
+        "data_description": {
+          "players": "Empty = every Music Assistant player that is available.",
+          "thermostats": "Empty = every climate entity."
+        }
+      },
+      "power": {
+        "title": "Power buttons",
+        "description": "Optionally pick the receiver / amplifier that each player uses. The player card and badge then show a power button for it, and the multiroom list too."
+      }
+    }
+  },
+  "selector": {
+    "theme": {
+      "options": {
+        "auto": "By mode (thermostat: heat orange, cool blue, off grey)",
+        "blue": "Blue",
+        "dark": "Dark",
+        "light": "Light",
+        "glass": "Glass (transparent)"
+      }
+    }
   }
 }

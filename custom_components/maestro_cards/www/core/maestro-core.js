@@ -1,4 +1,4 @@
-const VERSION = '1.4.0';
+const VERSION = '1.5.0';
 
 const P = {
   play: 'M8,5.14V19.14L19,12.14L8,5.14Z',
@@ -306,6 +306,28 @@ const withAlpha = (c, a) => {
   return c;
 };
 
+const SETTINGS = { p: null };
+
+function loadSettings(hass) {
+  if (!hass?.config?.components?.includes('maestro_cards')) return Promise.resolve(null);
+  if (!SETTINGS.p) SETTINGS.p = hass.callWS({ type: 'maestro_cards/settings' }).then((r) => r?.options || {}).catch(() => null);
+  return SETTINGS.p;
+}
+
+function withSettings(raw, s, kind) {
+  if (!s) return raw;
+  const c = { ...raw };
+  if (kind === 'player') {
+    if (c.theme === undefined && s.player_theme) c.theme = s.player_theme;
+    if (c.power_entity === undefined && c.show_power !== false && s.power?.[c.entity]) c.power_entity = s.power[c.entity];
+    if (!c.players?.length && s.players?.length) c.players = s.players;
+  } else if (kind === 'thermostat') {
+    if (c.theme === undefined && s.thermostat_theme) c.theme = s.thermostat_theme;
+    if (!c.thermostats?.length && s.thermostats?.length) c.thermostats = s.thermostats;
+  }
+  return c;
+}
+
 console.info(`%c MAESTRO %c v${VERSION} `, 'color:#fff;background:#2196F3;font-weight:700', 'color:#2196F3;background:#fff');
 
-export { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha };
+export { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha, loadSettings, withSettings };

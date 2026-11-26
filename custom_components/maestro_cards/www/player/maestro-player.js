@@ -1,4 +1,4 @@
-import { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha } from '../core/maestro-core.js?v=1.4.0';
+import { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha, loadSettings, withSettings } from '../core/maestro-core.js?v=1.5.0';
 
 const TAG = 'maestro-player-card';
 
@@ -204,6 +204,12 @@ class MaMiniPlayerCard extends HTMLElement {
 
   setConfig(config) {
     if (!config || !config.entity) throw new Error('Please define "entity" (a Music Assistant media_player)');
+    this._raw = config;
+    this._configure();
+  }
+
+  _configure() {
+    const config = withSettings(this._raw, this._settings, 'player');
     this._config = { ...DEFAULTS, icons: {}, ...config };
     if (Array.isArray(config.shade)) {
       if (config.shade_top === undefined) this._config.shade_top = config.shade[0];
@@ -217,6 +223,9 @@ class MaMiniPlayerCard extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
+    if (!this._settingsReq) {
+      this._settingsReq = loadSettings(hass).then((st) => { if (st) { this._settings = st; this._configure(); } });
+    }
     if (!this._els) return;
     this._update();
     const di = this.shadowRoot.getElementById('dspInline');
@@ -1008,7 +1017,7 @@ class MaMiniPlayerCard extends HTMLElement {
 
   _powerFor(id) {
     if (id === this._config.entity && this._hasPower()) return this._config.power_entity;
-    return this._config.power_entities?.[id] || this._powerMap?.[id] || null;
+    return this._config.power_entities?.[id] || this._settings?.power?.[id] || this._powerMap?.[id] || null;
   }
 
   _entityOn(id) {
@@ -1416,13 +1425,22 @@ class MaMiniPlayerBadge extends HTMLElement {
 
   setConfig(config) {
     if (!config?.entity) throw new Error('Please define "entity"');
-    this._config = { show_next: true, show_artist: true, show_seek: true, icons: {}, ...config };
+    this._raw = config;
+    this._configure();
+  }
+
+  _configure() {
+    this._config = { show_next: true, show_artist: true, show_seek: true, icons: {}, ...withSettings(this._raw, this._settings, 'player') };
     this._build();
     if (this._hass) this._update();
   }
 
   set hass(h) {
     this._hass = h;
+    if (!this._settingsReq) {
+      this._settingsReq = loadSettings(h).then((st) => { if (st) { this._settings = st; this._configure(); } });
+    }
+
     if (this._els) this._update();
     if (this._popup) this._popup.card.hass = h;
   }
