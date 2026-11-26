@@ -1,1 +1,0 @@
-DOMAIN = "maestro_player"

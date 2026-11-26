@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MAestro Cards",
+        "description": "Adds the MAestro cards (player, thermostat) and their badges to Home Assistant and lets every user (not only admins) use the player's DSP. No settings needed."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Already configured."
+    }
+  }
+}

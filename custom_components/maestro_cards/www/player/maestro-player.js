@@ -1,4 +1,4 @@
-import { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha } from './maestro-core.js?v=1.3.0';
+import { VERSION, P, svg, clamp, esc, STYLE, THEMES, THEME_NAMES, THEME_LABELS, rgbStr, luminance, resolveTheme, ensurePopupStyle, withAlpha } from '../core/maestro-core.js?v=1.4.0';
 
 const TAG = 'maestro-player-card';
 
@@ -576,7 +576,7 @@ class MaMiniPlayerCard extends HTMLElement {
   }
 
   async _infoGet() {
-    if (this._companion()) return this._hass.callWS({ type: 'maestro_player/media/info', entity_id: this._config.entity });
+    if (this._companion()) return this._hass.callWS({ type: 'maestro_cards/player/media/info', entity_id: this._config.entity });
 
     const ma = this._maClient();
     const uri = this._state()?.attributes.media_content_id;
@@ -1084,23 +1084,23 @@ class MaMiniPlayerCard extends HTMLElement {
   }
 
   _companion() {
-    return !this._config.ma_url && !!this._hass?.config?.components?.includes('maestro_player');
+    return !this._config.ma_url && !!this._hass?.config?.components?.includes('maestro_cards');
   }
 
   async _dspGet() {
-    if (this._companion()) return this._hass.callWS({ type: 'maestro_player/dsp/get', entity_id: this._config.entity });
+    if (this._companion()) return this._hass.callWS({ type: 'maestro_cards/player/dsp/get', entity_id: this._config.entity });
     const ma = this._maClient();
     return ma.cmd('config/players/dsp/get', { player_id: await this._maPlayerId(ma) });
   }
 
   async _dspSave(config) {
-    if (this._companion()) return this._hass.callWS({ type: 'maestro_player/dsp/save', entity_id: this._config.entity, config });
+    if (this._companion()) return this._hass.callWS({ type: 'maestro_cards/player/dsp/save', entity_id: this._config.entity, config });
     const ma = this._maClient();
     return ma.cmd('config/players/dsp/save', { player_id: await this._maPlayerId(ma), config });
   }
 
   async _queueIsDynamic(queueId) {
-    if (this._companion()) return !!(await this._hass.callWS({ type: 'maestro_player/queue/get', entity_id: this._config.entity }))?.is_dynamic;
+    if (this._companion()) return !!(await this._hass.callWS({ type: 'maestro_cards/player/queue/get', entity_id: this._config.entity }))?.is_dynamic;
     return !!(await this._maClient().cmd('player_queues/get', { queue_id: queueId }))?.is_dynamic;
   }
 

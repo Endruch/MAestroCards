@@ -1,4 +1,4 @@
-const VERSION = '1.3.0';
+const VERSION = '1.4.0';
 
 const P = {
   play: 'M8,5.14V19.14L19,12.14L8,5.14Z',

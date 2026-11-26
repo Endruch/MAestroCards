@@ -1,6 +1,6 @@
 {
-  "domain": "maestro_player",
-  "name": "MAestro Player",
+  "domain": "maestro_cards",
+  "name": "MAestro Cards",
   "codeowners": [
     "@Endruch"
   ],
@@ -11,11 +11,11 @@
     "music_assistant",
     "websocket_api"
   ],
-  "documentation": "https://github.com/Endruch/MAestroPlayer",
+  "documentation": "https://github.com/Endruch/MAestroCards",
   "integration_type": "service",
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/Endruch/MAestroPlayer/issues",
+  "issue_tracker": "https://github.com/Endruch/MAestroCards/issues",
   "requirements": [],
   "single_config_entry": true,
-  "version": "1.3.0"
+  "version": "1.4.0"
 }

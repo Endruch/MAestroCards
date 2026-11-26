@@ -1,59 +1,23 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 import voluptuous as vol
 
 from homeassistant.auth.permissions.const import POLICY_CONTROL, POLICY_READ
-from homeassistant.components import frontend, websocket_api
-from homeassistant.components.http import StaticPathConfig
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.components import websocket_api
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import HomeAssistantError, Unauthorized
 from homeassistant.helpers import config_validation as cv, entity_registry as er
-from homeassistant.helpers.typing import ConfigType
 
 from .const import DOMAIN
 
-CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
-
-WWW_DIR = Path(__file__).parent / "www"
-WWW_URL = f"/{DOMAIN}"
-CARDS = ("maestro-player.js", "maestro-thermostat.js")
-
-
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    await _register_frontend(hass)
-    _register_commands(hass)
-    return True
-
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    await _register_frontend(hass)
-    _register_commands(hass)
-    return True
-
-
-async def _register_frontend(hass: HomeAssistant) -> None:
-    if hass.data.get(f"{DOMAIN}_frontend"):
-        return
-    hass.data[f"{DOMAIN}_frontend"] = True
-    await hass.http.async_register_static_paths([StaticPathConfig(WWW_URL, str(WWW_DIR), False)])
-    for name in CARDS:
-        version = int(await hass.async_add_executor_job(lambda n=name: (WWW_DIR / n).stat().st_mtime))
-        frontend.add_extra_js_url(hass, f"{WWW_URL}/{name}?v={version}")
-
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    return True
-
 
 @callback
-def _register_commands(hass: HomeAssistant) -> None:
-    if hass.data.get(DOMAIN):
+def async_register_player(hass: HomeAssistant) -> None:
+    if hass.data.get(f"{DOMAIN}_player"):
         return
-    hass.data[DOMAIN] = True
+    hass.data[f"{DOMAIN}_player"] = True
     websocket_api.async_register_command(hass, ws_dsp_get)
     websocket_api.async_register_command(hass, ws_dsp_save)
     websocket_api.async_register_command(hass, ws_queue_get)
@@ -95,7 +59,7 @@ async def _run(connection, msg, coro) -> None:
 
 
 @websocket_api.websocket_command(
-    {vol.Required("type"): "maestro_player/dsp/get", vol.Required("entity_id"): cv.entity_id}
+    {vol.Required("type"): "maestro_cards/player/dsp/get", vol.Required("entity_id"): cv.entity_id}
 )
 @websocket_api.async_response
 async def ws_dsp_get(hass: HomeAssistant, connection, msg: dict[str, Any]) -> None:
@@ -110,7 +74,7 @@ async def ws_dsp_get(hass: HomeAssistant, connection, msg: dict[str, Any]) -> No
 
 @websocket_api.websocket_command(
     {
-        vol.Required("type"): "maestro_player/dsp/save",
+        vol.Required("type"): "maestro_cards/player/dsp/save",
         vol.Required("entity_id"): cv.entity_id,
         vol.Required("config"): dict,
     }
@@ -127,7 +91,7 @@ async def ws_dsp_save(hass: HomeAssistant, connection, msg: dict[str, Any]) -> N
 
 
 @websocket_api.websocket_command(
-    {vol.Required("type"): "maestro_player/queue/get", vol.Required("entity_id"): cv.entity_id}
+    {vol.Required("type"): "maestro_cards/player/queue/get", vol.Required("entity_id"): cv.entity_id}
 )
 @websocket_api.async_response
 async def ws_queue_get(hass: HomeAssistant, connection, msg: dict[str, Any]) -> None:
@@ -159,7 +123,7 @@ async def _try(coro):
 
 
 @websocket_api.websocket_command(
-    {vol.Required("type"): "maestro_player/media/info", vol.Required("entity_id"): cv.entity_id}
+    {vol.Required("type"): "maestro_cards/player/media/info", vol.Required("entity_id"): cv.entity_id}
 )
 @websocket_api.async_response
 async def ws_media_info(hass: HomeAssistant, connection, msg: dict[str, Any]) -> None:
