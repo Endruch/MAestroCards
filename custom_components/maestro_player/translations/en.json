@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "MAestro Player",
-        "description": "Adds the MAestro Player card and badge to Home Assistant and lets every user (not only admins) use DSP. No settings needed."
+        "description": "Adds the MAestro Player and MAestro Thermostat cards and badges to Home Assistant and lets every user (not only admins) use the player's DSP. No settings needed."
       }
     },
     "abort": {
