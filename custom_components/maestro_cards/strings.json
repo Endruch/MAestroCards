@@ -14,7 +14,7 @@
     "step": {
       "init": {
         "title": "MAestro Cards",
-        "description": "Found {players} Music Assistant players ({names}) and {thermostats} thermostats. Leave a list empty to use all of them. Settings made directly in a card always win.",
+        "description": "Found {players} Music Assistant players and {thermostats} thermostats. Tick the ones the cards should use. Settings made directly in a card always win.",
         "data": {
           "players": "Players in the multiroom list",
           "thermostats": "Thermostats in the thermostat list",
@@ -22,13 +22,13 @@
           "thermostat_theme": "Default color scheme of the thermostat"
         },
         "data_description": {
-          "players": "Empty = every Music Assistant player that is available.",
-          "thermostats": "Empty = every climate entity."
+          "players": "Shown in the player's multiroom list. Nothing ticked = all players.",
+          "thermostats": "Shown in the thermostat's list of other thermostats. Nothing ticked = all thermostats."
         }
       },
       "power": {
         "title": "Power buttons",
-        "description": "Optionally pick the receiver / amplifier that each player uses. The player card and badge then show a power button for it, and the multiroom list too."
+        "description": "Optionally pick the receiver / amplifier for each ticked player. The player card and badge then show a power button for it, and the multiroom list too."
       }
     }
   },
