@@ -15,23 +15,26 @@ from homeassistant.helpers.typing import ConfigType
 from .config_flow import ma_players, thermostats
 from .const import DOMAIN
 from .player import async_register_player
+from .wled import async_register_wled
 
 CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 WWW_DIR = Path(__file__).parent / "www"
 WWW_URL = f"/{DOMAIN}"
-CARDS = ("player/maestro-player.js", "thermostat/maestro-thermostat.js")
+CARDS = ("player/maestro-player.js", "thermostat/maestro-thermostat.js", "wled/maestro-wled.js", "switch/maestro-switch.js")
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     await _register_frontend(hass)
     async_register_player(hass)
+    async_register_wled(hass)
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await _register_frontend(hass)
     async_register_player(hass)
+    async_register_wled(hass)
     return True
 
 
