@@ -21,7 +21,7 @@ CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 WWW_DIR = Path(__file__).parent / "www"
 WWW_URL = f"/{DOMAIN}"
-CARDS = ("player/maestro-player.js", "thermostat/maestro-thermostat.js", "wled/maestro-wled.js", "switch/maestro-switch.js")
+CARDS = ("player/maestro-player.js", "thermostat/maestro-thermostat.js", "wled/maestro-wled.js", "switch/maestro-switch.js", "dimmer/maestro-dimmer.js", "sensor/maestro-sensor.js")
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
