@@ -174,5 +174,5 @@ window.customCards = window.customCards || [];
 if (!customElements.get('maestro-switch-card')) customElements.define('maestro-switch-card', MaestroSwitchCard);
 if (!customElements.get('maestro-switch-editor')) customElements.define('maestro-switch-editor', MaestroSwitchEditor);
 if (!window.customCards.some((c) => c.type === 'maestro-switch-card')) {
-  window.customCards.push({ type: 'maestro-switch-card', name: 'MAestro Switch', description: 'Pill on/off switch: tap anywhere to toggle, colors for on and off.', preview: true });
+  window.customCards.push({ type: 'maestro-switch-card', name: 'MAestro Switch', description: 'Pill on/off switch, tap anywhere to toggle. Works with lights, switches, fans, scripts, scenes, buttons and more.', preview: true });
 }

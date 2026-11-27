@@ -128,7 +128,7 @@ class MaestroDimmerCard extends HTMLElement {
     const end = (x) => {
       e.body.onpointermove = null;
       e.dm.classList.remove('drag');
-      move(x);
+      if (x.type === 'pointerup') move(x);
       this._drag = false;
       this._bindBody();
     };
@@ -154,8 +154,7 @@ class MaestroDimmerCard extends HTMLElement {
     const e = this._els;
     this._p = p;
     e.pct.textContent = `${p}%`;
-    const W = e.dm.clientWidth, sl = e.sl.offsetWidth ? e.sl.getBoundingClientRect().left - e.dm.getBoundingClientRect().left : 0;
-    e.lvl.style.width = p ? `${Math.round(sl + (p / 100) * (W - sl))}px` : '0';
+    e.lvl.style.width = `${p}%`;
     e.fill.style.width = `${p}%`;
     e.knob.style.left = `${p}%`;
   }
@@ -241,5 +240,5 @@ window.customCards = window.customCards || [];
 if (!customElements.get('maestro-dimmer-card')) customElements.define('maestro-dimmer-card', MaestroDimmerCard);
 if (!customElements.get('maestro-dimmer-editor')) customElements.define('maestro-dimmer-editor', MaestroDimmerEditor);
 if (!window.customCards.some((c) => c.type === 'maestro-dimmer-card')) {
-  window.customCards.push({ type: 'maestro-dimmer-card', name: 'MAestro Dimmer', description: 'Pill dimmer: power button, brightness slider, the card fills with color by level.', preview: true });
+  window.customCards.push({ type: 'maestro-dimmer-card', name: 'MAestro Dimmer', description: 'Power button and brightness slider; the card fills with color by level. Works with any dimmable light.', preview: true });
 }

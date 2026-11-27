@@ -173,6 +173,7 @@ const TEXT = {
   playlist: 'Playlists', album: 'Albums', track: 'Tracks', artist: 'Artists', radio: 'Radio', podcast: 'Podcasts', audiobook: 'Audiobooks',
   loading: 'Loading…', empty: 'Nothing here yet', error: 'Could not load',
   noPlayers: 'No Music Assistant players found', notFound: 'Entity not found',
+  noMa: 'Music Assistant is not installed', noMaHint: 'This card needs the Music Assistant integration',
   reset: 'Reset', custom: 'Custom', on: 'ON', off: 'OFF',
   connecting: 'Connecting to Music Assistant…',
   dynamic: 'Shuffle and repeat are not available in radio mode',
@@ -548,9 +549,10 @@ class MaMiniPlayerCard extends HTMLElement {
     const e = this._els;
     this._updatePower();
     this.shadowRoot.getElementById('sourceBtn').title = t.sources;
-    if (!st) {
-      e.title.textContent = `${t.notFound}: ${this._config.entity}`;
-      e.artist.textContent = '';
+    const noMa = this._hass?.config?.components && !this._hass.config.components.includes('music_assistant');
+    if (!st || noMa) {
+      e.title.textContent = noMa ? t.noMa : `${t.notFound}: ${this._config.entity}`;
+      e.artist.textContent = noMa ? t.noMaHint : '';
       return;
     }
     const a = st.attributes;
@@ -1869,7 +1871,7 @@ window.customCards = window.customCards || [];
 if (!customElements.get(TAG)) customElements.define(TAG, MaMiniPlayerCard);
 if (!customElements.get('maestro-player-badge')) customElements.define('maestro-player-badge', MaMiniPlayerBadge);
 if (!window.customBadges.some((b) => b.type === 'maestro-player-badge')) {
-  window.customBadges.push({ type: 'maestro-player-badge', name: 'MAestro Player (badge)', description: 'Tiny pill player for Music Assistant.', preview: true });
+  window.customBadges.push({ type: 'maestro-player-badge', name: 'MAestro Player (badge)', description: 'Tiny pill player. Requires Music Assistant.', preview: true });
 }
 if (!customElements.get('ma-mini-player-card')) customElements.define('ma-mini-player-card', class extends MaMiniPlayerCard {});
 if (!customElements.get('ma-mini-player-badge')) customElements.define('ma-mini-player-badge', class extends MaMiniPlayerBadge {});
@@ -1878,7 +1880,7 @@ if (!window.customCards.some((c) => c.type === TAG)) {
   window.customCards.push({
     type: TAG,
     name: 'MAestro Player',
-    description: 'Glass player for Music Assistant: sources, multiroom, spectrum, DSP, lyrics.',
+    description: 'Glass player: library, multiroom, spectrum, DSP, lyrics. Requires Music Assistant.',
     preview: true,
   });
 }

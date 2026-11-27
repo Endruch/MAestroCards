@@ -653,6 +653,7 @@ class MaestroThermostatBadge extends HTMLElement {
   _configure() {
     this._config = withSettings({ ...this._raw }, this._settings, 'thermostat');
     this._themeKey = null;
+    this._icon = null;
     this.shadowRoot.innerHTML = `<style>${T_BADGE_STYLE}</style><div class="b" id="b"><span class="ic" id="ic"></span><span class="cur" id="cur">--</span><span class="tg" id="tg"></span></div>`;
     this._b = this.shadowRoot.getElementById('b');
     this._b.onclick = () => this._openPopup();
@@ -782,11 +783,11 @@ class MaestroThermostatEditor extends HTMLElement {
 window.customBadges = window.customBadges || [];
 window.customCards = window.customCards || [];
 if (!window.customBadges.some((b) => b.type === 'maestro-thermostat-badge')) {
-  window.customBadges.push({ type: 'maestro-thermostat-badge', name: 'MAestro Thermostat (badge)', description: 'Tiny pill thermostat.', preview: true });
+  window.customBadges.push({ type: 'maestro-thermostat-badge', name: 'MAestro Thermostat (badge)', description: 'Tiny pill thermostat. Works with any climate entity.', preview: true });
 }
 if (!customElements.get('maestro-thermostat-card')) customElements.define('maestro-thermostat-card', MaestroThermostatCard);
 if (!customElements.get('maestro-thermostat-editor')) customElements.define('maestro-thermostat-editor', MaestroThermostatEditor);
 if (!customElements.get('maestro-thermostat-badge')) customElements.define('maestro-thermostat-badge', MaestroThermostatBadge);
 if (!window.customCards.some((c) => c.type === 'maestro-thermostat-card')) {
-  window.customCards.push({ type: 'maestro-thermostat-card', name: 'MAestro Thermostat', description: 'Thermostat in the MAestro style: room temperature, target, history graph, modes.', preview: true });
+  window.customCards.push({ type: 'maestro-thermostat-card', name: 'MAestro Thermostat', description: 'Room temperature, target, history graph and modes. Works with any climate entity or your own sensors and switches.', preview: true });
 }

@@ -36,7 +36,8 @@ function syncIcons(root, hass, cfg) {
     const st = hass.states[el.dataset.e];
     el.hass = hass;
     el.stateObj = st;
-    const icon = iconFor(st, el.dataset.own || '');
+    let icon = iconFor(st, el.dataset.own || '');
+    if (icon && !el.dataset.own && el.parentElement?.classList.contains('aic')) icon = icon.replace('-alert', '');
     if (icon) el.icon = icon; else el.removeAttribute('icon');
   });
 }
@@ -461,8 +462,8 @@ if (!customElements.get('maestro-sensor-card')) customElements.define('maestro-s
 if (!customElements.get('maestro-sensor-badge')) customElements.define('maestro-sensor-badge', MaestroSensorBadge);
 if (!customElements.get('maestro-sensor-editor')) customElements.define('maestro-sensor-editor', MaestroSensorEditor);
 if (!window.customCards.some((x) => x.type === 'maestro-sensor-card')) {
-  window.customCards.push({ type: 'maestro-sensor-card', name: 'MAestro Sensor', description: 'Info card: value with graph, two values side by side, or an alert (leak, smoke, doors…).', preview: true });
+  window.customCards.push({ type: 'maestro-sensor-card', name: 'MAestro Sensor', description: 'Value with a graph, two values side by side, or an alert (leak, smoke, doors…). Works with any sensor or binary sensor.', preview: true });
 }
 if (!window.customBadges.some((x) => x.type === 'maestro-sensor-badge')) {
-  window.customBadges.push({ type: 'maestro-sensor-badge', name: 'MAestro Sensor (badge)', description: 'Pill with a sensor value or state.', preview: true });
+  window.customBadges.push({ type: 'maestro-sensor-badge', name: 'MAestro Sensor (badge)', description: 'Pill with a sensor value or state. Works with any sensor or binary sensor.', preview: true });
 }

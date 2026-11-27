@@ -95,6 +95,11 @@ class WledStore {
       this.emit();
       return;
     }
+    if (!this.hass.config.components.includes('wled')) {
+      this.error = 'The WLED integration is not installed — this card needs a WLED device added in Home Assistant';
+      this.emit();
+      return;
+    }
     try {
       const r = await this.hass.callWS({ type: 'maestro_cards/wled/info', entity_id: this.entity });
       this.data = r;
@@ -102,7 +107,7 @@ class WledStore {
       this.presets = r.presets || {};
       this.error = null;
     } catch (e) {
-      this.error = e?.message || 'WLED is not reachable';
+      this.error = /is not a WLED entity/.test(e?.message || '') ? 'This light is not a WLED device — pick a light from the WLED integration' : e?.message || 'WLED is not reachable';
       this.started = false;
       this.emit();
       return;
@@ -1003,8 +1008,8 @@ if (!customElements.get('maestro-wled-card')) customElements.define('maestro-wle
 if (!customElements.get('maestro-wled-editor')) customElements.define('maestro-wled-editor', MaestroWledEditor);
 if (!customElements.get('maestro-wled-badge')) customElements.define('maestro-wled-badge', MaestroWledBadge);
 if (!window.customBadges.some((b) => b.type === 'maestro-wled-badge')) {
-  window.customBadges.push({ type: 'maestro-wled-badge', name: 'MAestro WLED (badge)', description: 'Tiny pill for a WLED strip.', preview: true });
+  window.customBadges.push({ type: 'maestro-wled-badge', name: 'MAestro WLED (badge)', description: 'Tiny pill for a WLED strip. Requires the WLED integration.', preview: true });
 }
 if (!window.customCards.some((c) => c.type === 'maestro-wled-card')) {
-  window.customCards.push({ type: 'maestro-wled-card', name: 'MAestro WLED', description: 'WLED control in the MAestro style: power, brightness, colors, effects, palettes, zones, presets and playlists.', preview: true });
+  window.customCards.push({ type: 'maestro-wled-card', name: 'MAestro WLED', description: 'WLED control: power, brightness, colors, effects, palettes, zones, presets and playlists. Requires the WLED integration.', preview: true });
 }
